@@ -24,6 +24,11 @@ export const factory = {
         gameArea.appendChild(wizardElement);
     },
     createFireball(wizard) {
+        // Check cooldown
+        if (wizard.lastMagicUse + wizard.cooldown > Date.now()) {
+            return;
+        }
+
         // create element
         const fireballElement = document.createElement('div');
         fireballElement.classList.add('fireball');
@@ -40,6 +45,9 @@ export const factory = {
         // TODO: need ajustment to match arm position
         fireballElement.style.left = wizard.x + wizard.width + 'px';
         fireballElement.style.top = wizard.y + wizard.width / 2 + 'px';
+
+        // modify wizard
+        wizard.lastMagicUse = Date.now();
 
         // add to dom
         gameArea.appendChild(fireballElement);
