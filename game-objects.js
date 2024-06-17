@@ -51,5 +51,26 @@ export const factory = {
 
         // add to dom
         gameArea.appendChild(fireballElement);
+    },
+    createBug() {
+        // create element
+        const bugElement = document.createElement('div');
+        bugElement.classList.add('bug');
+
+        // Styles
+        bugElement.style.backgroundImage = 'url("images/bug.png")';
+        bugElement.style.backgroundSize = 'contain';
+        bugElement.style.backgroundRepeat = 'no-repeat';
+        bugElement.style.backgroundPosition = 'center';
+        bugElement.style.width = '10px';
+        bugElement.style.height = '10px';
+        bugElement.style.position = 'absolute';
+        
+        // set positions
+        bugElement.style.left = gameArea.offsetWidth + 'px';
+        bugElement.style.top = Math.random() * (gameArea.offsetHeight - 10) + 'px';
+        
+        // append to DOM
+        gameArea.appendChild(bugElement);
     }
 }
