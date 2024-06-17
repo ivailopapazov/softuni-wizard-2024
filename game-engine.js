@@ -21,7 +21,20 @@ function newFrame() {
     }
 
     // create bugs
-    factory.createBug();
+    if (state.lastBugSpawn + state.maxBugSpawnTime * Math.random() < Date.now()) {
+        factory.createBug();
+        state.lastBugSpawn = Date.now();
+    }
+
+    // move bugs
+    const bugs = document.querySelectorAll('.bug');
+    bugs.forEach(bug => {
+        if (bug.offsetLeft < 0) {
+            return bug.remove();
+        }
+
+        bug.style.left = bug.offsetLeft - config.bugSpeed + 'px';
+    });
 
     // Apply score
     state.score += config.timePoints;
