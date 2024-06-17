@@ -19,5 +19,5 @@ export const state = {
         Space: false,
     },
     lastBugSpawn: 0,
-    maxBugSpawnTime: 2000, 
+    maxBugSpawnTime: 20000, 
 };

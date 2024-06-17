@@ -8,7 +8,7 @@ const gameArea = document.querySelector('.game-area');
 // Game frames
 function newFrame() {
     // Move wizard
-    modifyWizardPosition();
+    const wizardElement = modifyWizardPosition();
 
     // Modify fireballs
     const fireballs = document.querySelectorAll('.fireball');
@@ -29,10 +29,28 @@ function newFrame() {
     // move bugs
     const bugs = document.querySelectorAll('.bug');
     bugs.forEach(bug => {
+        // remove outside bugs
         if (bug.offsetLeft < 0) {
             return bug.remove();
         }
 
+        // check wizard collision 
+        const hasCollision = checkCollision(wizardElement, bug);
+        if (hasCollision) {
+            state.isGameOver = true;
+        }
+
+        // check fireball collision
+        const fireballs = document.querySelectorAll('.fireball');
+        fireballs.forEach(fireball => {
+            if (checkCollision(fireball, bug)) {
+                fireball.remove();
+                bug.remove();
+                state.score += config.bugPoints;
+            }
+        }); 
+
+        // Move buggs
         bug.style.left = bug.offsetLeft - config.bugSpeed + 'px';
     });
 
@@ -43,7 +61,23 @@ function newFrame() {
     // Game over check
     if (!state.isGameOver) {
         window.requestAnimationFrame(newFrame);
+    } else {
+        const gameOverArea = document.querySelector('.game-over');
+        gameOverArea.classList.remove('hidden');
     }
+}
+
+function checkCollision(firstElement, secondElement) {
+    const first = firstElement.getBoundingClientRect();
+    const second = secondElement.getBoundingClientRect();
+
+    const hasCollision = !(first.top > second.bottom
+        || first.botton < second.top
+        || first.right < second.left
+        || first.left > second.right
+    )
+
+    return hasCollision
 }
 
 // TODO: Fix acceleration on diagonals
@@ -77,6 +111,8 @@ function modifyWizardPosition() {
     } else {
         wizardElement.style.backgroundImage = 'url("images/wizard.png")';
     }
+
+    return wizardElement;
 }
 
 export const engine = {
